@@ -16,6 +16,8 @@ Connecting from within the container
 The database server can be connected to by executing SQL*Plus,
 
     docker exec -it <oracle-db> bash -c "source /home/oracle/.bashrc; sqlplus /nolog"
+and execute
+    conn / as sysdba
 
 Connecting from outside the container
 The database server exposes port 1521 for Oracle client connections over SQLNet protocol and port 5500 for Oracle XML DB. SQLPlus or any JDBC client can be used to connect to the database server from outside the container.
