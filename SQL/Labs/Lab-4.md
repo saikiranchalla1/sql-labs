@@ -1,4 +1,4 @@
-## Lab 4. Inserting, Updating, Deleting
+# Lab 4. Inserting, Updating, Deleting
 The past few labs have focused on basic query techniques, all centered around the task of getting data out of a database. This lab turns the tables, and focuses on the following three topic areas:
 
 * Inserting new records into your database
