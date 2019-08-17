@@ -39,3 +39,17 @@ ORCLPDB1=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=<ip-address> of host)(PORT=<m
 To connect from outside the container using SQL*Plus,
 
     sqlplus sys/Oradoc_db1@ORCLCDB as sysdba
+
+
+
+## Vagrant
+1) Install Vagrant and clone `https://github.com/oracle/vagrant-boxes/tree/master/OracleDatabase/18.4.0-XE`
+2) Run `vagrant up` to install the database.
+3) Run `vagrant ssh` to ssh into the VM
+4) Switch user to Oracle using `sudo su oracle`. Check the root folder using `echo $HOME`
+5) Change directory to `/opt/oracle/product/18c/dbhomeXE`
+6) Login as SYSDBA using `sqlplus '/' AS SYSDBA`.
+7) Create a user called `c##scott` using `create user c##scott identified by tiger`
+8) Grant unlimited tablespace access to the above user using `grant unlimited tablespace to c##scott;`
+9) Grant further privileges to the user `grant connect, resource,dba to c##scott`
+10) 

@@ -150,7 +150,7 @@ Use the "+” operator for concatenation:
 Use the CONCAT function to concatenate values from multiple columns. The || is a shortcut for the CONCAT function in DB2, Oracle, and PostgreSQL, while + is the shortcut for SQL Server.
 ## 1.8. Using Conditional Logic in a SELECT Statement
 #### PROBLEM
-You want to perform IF-ELSE operations on values in your SELECT statement. For example, you would like to produce a result set such that, if an employee is paid $2000 or less, a message of “UNDERPAID” is returned, if an employee is paid $4000 or more, a message of “OVERPAID” is returned, if they make somewhere in between, then “OK” is returned. The result set should look like this:
+You want to perform IF-ELSE operations on values in your SELECT statement. For example, you would like to produce a result set such that, if an employee is paid USD 2000 or less, a message of "UNDERPAID" is returned, if an employee is paid $4000 or more, a message of “OVERPAID” is returned, if they make somewhere in between, then “OK” is returned. The result set should look like this:
 	ENAME             SAL  STATUS
 	---------- ----------  ---------
 	SMITH             800  UNDERPAID
@@ -169,12 +169,14 @@ You want to perform IF-ELSE operations on values in your SELECT statement. For e
 	MILLER          1300   UNDERPAID
 #### SOLUTION
 Use the CASE expression to perform conditional logic directly in your SELECT statement:
-	```select ename,sal,
+
+	select ename,sal,
 	case when sal <= 2000 then 'UNDERPAID'
 	when sal >= 4000 then 'OVERPAID'
 	else 'OK'
 	end as status
-	rom emp```
+	from emp
+
 #### DISCUSSION
 The CASE expression allows you to perform condition logic on values returned by a query. You can provide an alias for a CASE expression to return a more readable result set. In the solution, you’ll see the alias STATUS given to the result of the CASE expression. The ELSE clause is optional. Omit the ELSE, and the CASE expression will return NULL for any row that does not satisfy the test condition.
 ## 1.9. Limiting the Number of Rows Returned
@@ -306,10 +308,9 @@ Of the employees in departments 10 and 20, you want to return only those that ha
 	MILLER      CLERK
 #### SOLUTION
 Use the LIKE operator in conjunction with the SQL wildcard operator (”%”):
-	```select ename, job
+	select ename, job
 	from emp
 	where deptno in (10,20)
-	and (ename like '%I%' or job like '%ER')```
+	and (ename like '%I%' or job like '%ER')
 #### DISCUSSION
 When used in a LIKE pattern-match operation, the percent (“%”) operator matches any sequence of characters. Most SQL implementations also provide the underscore (“_”) operator to match a single character. By enclosing the search pattern “I” with “%” operators, any string that contains an “I” (at any position) will be returned. If you do not enclose the search pattern with “%”, then where you place the operator will affect the results of the query. For example, to find job titles that end in “ER”, prefix the “%” operator to “ER”; if the requirement is to search for all job titles beginning with “ER”, then append the “%” operator to “ER”. 
-
