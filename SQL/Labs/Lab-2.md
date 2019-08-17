@@ -94,7 +94,7 @@ You want to sort the results of a query by specific parts of a string. For examp
 	SCOTT       ANALYST
 	FORD        ANALYST
 
-####SOLUTION
+#### SOLUTION
 DB2, MySQL, Oracle, and PostgreSQL
 Use the SUBSTR function in the ORDER BY clause:
 
@@ -189,7 +189,7 @@ Use the functions REPLACE and TRANSLATE to modify the string for sorting:
 	ORDER BY ENAME
 
 	select data
-	from emp
+	from V
 	order by replace(
 	translate(data,'0123456789','##########'),'#','')
 
@@ -247,7 +247,7 @@ The TRANSLATE and REPLACE functions remove either the numbers or characters from
 	FORD 20      20     FORD
 	MILLER 10    10     MILLER
 
-##2.5. Dealing with Nulls when Sorting
+##2.5 Dealing with Nulls when Sorting
 ####PROBLEM
 You want to sort results from EMP by COMM, but the field is nullable. You need a way to specify whether nulls sort last:
 
