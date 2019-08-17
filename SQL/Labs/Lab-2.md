@@ -10,16 +10,16 @@ You want to display the names, job, and salaries of employees in department 10 i
 	KING        PRESIDENT        5000
 #### SOLUTION
 Use the ORDER BY clause:
-	```select ename,job,sal
+	select ename,job,sal
 	from emp
 	where deptno = 10
-	order by sal asc```
+	order by sal asc
 #### DISCUSSION
 The ORDER BY clause allows you to order the rows of your result set. The solution sorts the rows based on SAL in ascending order. By default, ORDER BY will sort in ascending order, and the ASC clause is therefore optional. Alternatively, specify DESC to sort in descending order:
-	```select ename,job,sal
+	select ename,job,sal
 	  from emp
 	 where deptno = 10
-	 order by sal desc```
+	 order by sal desc
 
 	ENAME       JOB               SAL
 	----------  ---------  ----------
@@ -27,10 +27,10 @@ The ORDER BY clause allows you to order the rows of your result set. The solutio
 	CLARK       MANAGER          2450
 	MILLER      CLERK            1300
 You need not specify the name of the column on which to sort. You can instead specify a number representing the column. The number starts at 1 and matches the items in the SELECT list from left to right. For example:
-	```select ename,job,sal
+	select ename,job,sal
 	  from emp
 	 where deptno = 10
-	 order by 3 desc```
+	 order by 3 desc
 
 	ENAME       JOB               SAL
 	----------  ---------  ----------
@@ -86,23 +86,23 @@ You want to sort the results of a query by specific parts of a string. For examp
 ####SOLUTION
 DB2, MySQL, Oracle, and PostgreSQL
 Use the SUBSTR function in the ORDER BY clause:
-	```select ename,job
+	select ename,job
 	  from emp
-	 order by substr(job,length(job)-1)```
+	 order by substr(job,length(job)-1)
 __SQL Server__
 Use the SUBSTRING function in the ORDER BY clause:
-	```select ename,job
+	select ename,job
 	  from emp
-	 order by substring(job,len(job)-1,2)```
+	 order by substring(job,len(job)-1,2)
 #### DISCUSSION
 Using your DBMS’s substring function, you can easily sort by any part of a string. To sort by the last two characters of a string, find the end of the string (which is the length of the string) and subtract 2. The start position will be the second to last character in the string. You then take all characters after that start position. Because SQL Server requires a third parameter in SUBSTRING to specify the number of characters to take. In this example, any number greater than or equal to 2 will work.
 ## 2.4. Sorting Mixed Alphanumeric Data
 #### PROBLEM
 You have mixed alphanumeric data and want to sort by either the numeric or character portion of the data. Consider this view:
-	```create view V
+	create view V
 	as
 	select ename||' '||deptno as data
-	  from emp```
+	  from emp
 
 	select * from V
 
@@ -200,13 +200,13 @@ __MySQL and SQL Server__
 The TRANSLATE function is not currently supported by these platforms, thus a solution for this problem will not be provided.
 DISCUSSION
 The TRANSLATE and REPLACE functions remove either the numbers or characters from each row, allowing you to easily sort by one or the other. The values passed to ORDER BY are shown in the following query results (using the Oracle solution as the example, as the same technique applies to all three vendors; only the order of parameters passed to TRANSLATE is what sets DB2 apart):
-	```select data,
+	select data,
 	       replace(data,
 	       replace(
 	     translate(data,'0123456789','##########'),'#',''),'') nums,
 	       replace(
 	     translate(data,'0123456789','##########'),'#','') chars
-	  from V```
+	  from V
 
 	DATA         NUMS   CHARS
 	------------ ------ ----------
@@ -262,23 +262,23 @@ or whether they sort first:
 	TURNER            1500           0
 #### SOLUTION
 Depending on how you want the data to look (and how your particular RDBMS sorts NULL values), you can sort the nullable column in ascending or descending order:
-    ```select ename,sal,comm
+    select ename,sal,comm
       from emp
      order by   
     select ename,sal,comm
       from emp
-     order by 3 desc```
+     order by 3 desc
 This solution puts you in a position such that if the nullable column contains non-NULL values, they will be sorted in ascending or descending order as well, according to what you ask for; this may or may not what you have in mind. If instead you would like to sort NULL values differently than non-NULL values, for example, you want to sort non-NULL values in ascending or descending order and all NULL values last, you can use a CASE expression to conditionally sort the column.
 DB2, MySQL, PostgreSQL, and SQL Server
 Use a CASE expression to “flag” when a value is NULL. The idea is to have a flag with two values: one to represent NULLs, the other to represent non-NULLs. Once you have that, simply add this flag column to the ORDER BY clause. You’ll easily be able to control whether NULL values are sorted first or last without interfering with non-NULL values:
 	/* NON-NULL COMM SORTED ASCENDING, ALL NULLS LAST */
-	```select ename,sal,comm
+	select ename,sal,comm
 	  from (
 	select ename,sal,comm,
 	       case when comm is null then 0 else 1 end as is_null
 	  from emp
 	       ) x
-	  order by is_null desc,comm```
+	  order by is_null desc,comm
 
 	ENAME     SAL        COMM
 	------  -----  ----------
@@ -383,9 +383,9 @@ Use a CASE expression to “flag” when a value is NULL. The idea is to have a 
 __Oracle__
 Users on Oracle8i Database and earlier can use the solution for the other platforms. Users on Oracle9i Database and later can use the NULLS FIRST and NULLS LAST extension to the ORDER BYclause to ensure NULLs are sorted first or last regardless of how non-NULL values are sorted:
 	/* NON-NULL COMM SORTED ASCENDING, ALL NULLS LAST */
-	```select ename,sal,comm
+	select ename,sal,comm
 	  from emp
-	 order by comm nulls last```
+	 order by comm nulls last
 
 	ENAME    SAL       COMM
 	------  ----- ---------
@@ -456,9 +456,9 @@ Unless your RDBMS provides you with a way to easily sort NULL values first or la
 __TIP__
 _As of the time of this writing, DB2 users can use NULLS FIRST and NULLS LAST in the ORDER BY subclause of the OVER clause in window functions but not in the ORDER BY clause for the entire result set._
 The purpose of this extra column (in the query only, not in the table) is to allow you to identify NULL values and sort them altogether, first or last. The following query returns the result set for inline view X for the non-Oracle solution:
-	```select ename,sal,comm,
+	select ename,sal,comm,
 	       case when comm is null then 0 else 1 end as is_null
-	  from emp```
+	  from emp
 
 	ENAME    SAL       COMM    IS_NULL
 	------ ----- ---------- ----------
@@ -499,15 +499,15 @@ You want to sort based on some conditional logic. For example: if JOB is “SALE
 	KING             5000  PRESIDENT
 #### SOLUTION
 Use a CASE expression in the ORDER BY clause:
-	``` select ename,sal,job,comm
+	 select ename,sal,job,comm
 	   from emp
-	  order by case when job = 'SALESMAN' then comm else sal end```
+	  order by case when job = 'SALESMAN' then comm else sal end
 #### DISCUSSION
 You can use the CASE expression to dynamically change how results are sorted. The values passed to the ORDER BY look as follows:
-	```select ename,sal,job,comm,
+	select ename,sal,job,comm,
 	       case when job = 'SALESMAN' then comm else sal end as ordered
 	  from emp
-	 order by 5```
+	 order by 5
 
 	ENAME             SAL JOB             COMM    ORDERED
 	---------- ---------- --------- ---------- ----------
