@@ -2,33 +2,33 @@
 This lab presents recipes that allow you to find information about a given schema. For example, you may wish to know what tables you’ve created or which foreign keys are not indexed. All of the RDBMSs in the lab provide tables and views for obtaining such data. The recipes in this lab will get you started on gleaning information from those tables and views. There is, however, far more information available than the recipes in this lab can show. Consult your RDBMSs documentation for the complete list of catalog or data dictionary tables/views.
 
 __TIP__
-_For purposes of demonstration, all the recipes in this lab assume the schema name SMEAGOL._
+_For purposes of demonstration, all the recipes in this lab assume the schema name C##SCOTT._
 
 ## 5.1. Listing Tables in a Schema
 #####PROBLEM
 You want to see a list all the tables you’ve created in a given schema.
 
 ####SOLUTION
-The solutions that follow all assume you are working with the SMEAGOL schema. The basic approach to a solution is the same for all RDBMSs: you query a system table (or view) containing a row for each table in the database.
+The solutions that follow all assume you are working with the C##SCOTT schema. The basic approach to a solution is the same for all RDBMSs: you query a system table (or view) containing a row for each table in the database.
 
 DB2
 Query SYSCAT.TABLES:
 
 	select tabname
 	  from syscat.tables
-	 where tabschema = 'SMEAGOL'
+	 where tabschema = 'C##SCOTT'
 Oracle
 Query SYS.ALL_TABLES:
 
 	select table_name
 	  from all_tables
-	 where owner = 'SMEAGOL'
+	 where owner = 'C##SCOTT'
 PostgreSQL, MySQL, and SQL Server
 Query INFORMATION_SCHEMA.TABLES:
 
 	select table_name
 	  from information_schema.tables
-	 where table_schema = 'SMEAGOL'
+	 where table_schema = 'C##SCOTT'
 #### DISCUSSION
 In a delightfully circular manner, databases expose information about themselves through the very mechanisms that you create for your own applications: tables and views. Oracle, for example, maintains an extensive catalog of system views, such as ALL_TABLES, that you can query for information about tables, indexes, grants, and any other database object.
 
@@ -42,7 +42,7 @@ Oracle’s system views and DB2’s system tables are each vendor-specific. Post
 You want to list the columns in a table, along with their data types, and their position in the table they are in.
 
 #### SOLUTION
-The following solutions assume that you wish to list columns, their data types, and their numeric position in the table named EMP in the schema SMEAGOL.
+The following solutions assume that you wish to list columns, their data types, and their numeric position in the table named EMP in the schema C##SCOTT.
 
 DB2
 Query SYSCAT.COLUMNS:
@@ -51,20 +51,20 @@ Query SYSCAT.COLUMNS:
 	select colname, typename, colno
 	  from syscat.columns
 	 where tabname   = 'EMP'
-	   and tabschema = 'SMEAGOL'
+	   and tabschema = 'C##SCOTT'
 Oracle
 Query ALL_TAB_COLUMNS:
 
 	select column_name, data_type, column_id
 	  from all_tab_columns
-	 where owner      = 'SMEAGOL'
+	 where owner      = 'C##SCOTT'
 	   and table_name = 'EMP'
 PostgreSQL, MySQL, and SQL Server
 Query INFORMATION_SCHEMA.COLUMNS:
 
 	select column_name, data_type, ordinal_position
 	  from information_schema.columns
-	 where table_schema = 'SMEAGOL'
+	 where table_schema = 'C##SCOTT'
 	   and table_name   = 'EMP'
 #### DISCUSSION
 Each vendor provides ways for you to get detailed information about your column data. In the examples above only the column name, data type, and position are returned. Additional useful items of information include length, nullability, and default values.
@@ -74,7 +74,7 @@ Each vendor provides ways for you to get detailed information about your column 
 You want list indexes, their columns, and the column position (if available) in the index for a given table.
 
 #### SOLUTION
-The vendor-specific solutions that follow all assume that you are listing indexes for the table EMP in the SMEAGOL schema.
+The vendor-specific solutions that follow all assume that you are listing indexes for the table EMP in the C##SCOTT schema.
 
 DB2
 Query SYSCAT.INDEXES:
@@ -83,7 +83,7 @@ Query SYSCAT.INDEXES:
 	  from syscat.indexes a,
 	       syscat.indexcoluse b
 	 where a.tabname   = 'EMP'
-	   and a.tabschema = 'SMEAGOL'
+	   and a.tabschema = 'C##SCOTT'
 	   and a.indschema = b.indschema
 	   and a.indname   = b.indname
 Oracle
@@ -92,14 +92,14 @@ Query SYS.ALL_IND_COLUMNS:
 	select table_name, index_name, column_name, column_position
 	  from sys.all_ind_columns
 	 where table_name  = 'EMP'
-	   and table_owner = 'SMEAGOL'
+	   and table_owner = 'C##SCOTT'
 PostgreSQL
 Query PG_CATALOG.PG_INDEXES and INFORMATION_SCHEMA.COLUMNS:
 
 	select a.tablename,a.indexname,b.column_name
 	  from pg_catalog.pg_indexes a,
 	       information_schema.columns b
-	 where a.schemaname = 'SMEAGOL'
+	 where a.schemaname = 'C##SCOTT'
 	   and a.tablename  = b.table_name
 MySQL
 Use the SHOW INDEX command:
@@ -137,7 +137,7 @@ Query SYSCAT.TABCONST and SYSCAT.COLUMNS:
 	    from syscat.tabconst a,
 	         syscat.columns b
 	  where a.tabname   = 'EMP'
-	    and a.tabschema = 'SMEAGOL'
+	    and a.tabschema = 'C##SCOTT'
 	    and a.tabname   = b.tabname
 	    and a.tabschema = b.tabschema
 Oracle
@@ -150,7 +150,7 @@ Query SYS.ALL_CONSTRAINTS and SYS.ALL_CONS_COLUMNS:
 	    from all_constraints a,
 	         all_cons_columns b
 	  where a.table_name      = 'EMP'
-	    and a.owner           = 'SMEAGOL'
+	    and a.owner           = 'C##SCOTT'
 	    and a.table_name      = b.table_name
 	    and a.owner           = b.owner
 	    and a.constraint_name = b.constraint_name
@@ -164,7 +164,7 @@ Query INFORMATION_SCHEMA.TABLE_CONSTRAINTS and INFORMATION_ SCHEMA.KEY_COLUMN_US
 	    from information_schema.table_constraints a,
 	         information_schema.key_column_usage b
 	  where a.table_name      = 'EMP'
-	    and a.table_schema    = 'SMEAGOL'
+	    and a.table_schema    = 'C##SCOTT'
 	    and a.table_name      = b.table_name
 	    and a.table_schema    = b.table_schema
 	    and a.constraint_name = b.constraint_name
@@ -188,7 +188,7 @@ Query SYSCAT.TABCONST, SYSCAT.KEYCOLUSE, SYSCAT.INDEXES, and SYSCAT.INDEXCOLUSE:
 	    from syscat.tabconst a,
 	         syscat.keycoluse b
 	  where a.tabname    = 'EMP'
-	    and a.tabschema  = 'SMEAGOL'
+	    and a.tabschema  = 'C##SCOTT'
 	    and a.type       = 'F'
 	    and a.tabname    = b.tabname
 	    and a.tabschema  = b.tabschema
@@ -219,7 +219,7 @@ Query SYS.ALL_CONS_COLUMNS, SYS.ALL_CONSTRAINTS, and SYS.ALL_ IND_COLUMNS:
 	         all_constraints b,
 	         all_ind_columns c
 	  where a.table_name      = 'EMP'
-	    and a.owner           = 'SMEAGOL'
+	    and a.owner           = 'C##SCOTT'
 	    and b.constraint_type = 'R'
 	    and a.owner           = b.owner
 	    and a.table_name      = b.table_name
@@ -244,7 +244,7 @@ Query INFORMATION_SCHEMA.KEY_COLUMN_USAGE, INFORMATION_ SCHEMA.REFERENTIAL_CONST
 	         information_schema.referential_constraints b
 	   where a.constraint_name   = b.constraint_name
 	     and a.constraint_schema = b.constraint_schema
-	     and a.constraint_schema = 'SMEAGOL'
+	     and a.constraint_schema = 'C##SCOTT'
 	     and a.table_name        = 'EMP'
 	         ) fkeys
 	         left join
