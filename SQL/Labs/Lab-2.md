@@ -219,7 +219,7 @@ Implicit type conversion is more strict in DB2 than in Oracle or PostgreSQL, so 
 
 MySQL and SQL Server
 The TRANSLATE function is not currently supported by these platforms, thus a solution for this problem will not be provided.
-DISCUSSION
+####DISCUSSION
 The TRANSLATE and REPLACE functions remove either the numbers or characters from each row, allowing you to easily sort by one or the other. The values passed to ORDER BY are shown in the following query results (using the Oracle solution as the example, as the same technique applies to all three vendors; only the order of parameters passed to TRANSLATE is what sets DB2 apart):
 
 	select data,
