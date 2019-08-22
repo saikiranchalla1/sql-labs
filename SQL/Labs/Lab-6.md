@@ -1323,7 +1323,7 @@ By walking the string passed to the IN-list, you can easily convert it to rows. 
 	               (select rownum pos from emp) iter
 	         where iter.pos <= ((length(csv.emps)-
 	                   length(replace(csv.emps,',')))/length(','))-1
-	 )
+	 );
 Postgres
 By walking the string passed to the IN-list, you can easily convert it to rows. The function SPLIT_PART makes it easy to parse the string into individual numbers:
 
